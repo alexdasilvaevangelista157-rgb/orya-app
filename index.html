@@ -155,14 +155,7 @@ function voltarFeed(){
   document.getElementById("feed").classList.remove("hidden");
 }
 
-function enviarMensagem(){
-  let msg = document.getElementById("mensagemInput").value;
-  if(msg=="") return;
 
-  let area = document.getElementById("mensagens");
-  area.innerHTML += "<div><b>Você:</b> " + msg + "</div>";
-  document.getElementById("mensagemInput").value="";
-}
 
 let pessoas = [
 {nome:"Anna",idade:22,pais:"Alemanha 🇩🇪",bio:"Amo viajar e conhecer culturas"},
