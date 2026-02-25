@@ -7,59 +7,94 @@
 
 <style>
 body{
-background:black;
-color:white;
-font-family:Arial;
+margin:0;
+font-family: Arial, sans-serif;
+background:#fafafa;
+}
+
+header{
+background:white;
+padding:15px;
 text-align:center;
-padding:30px;
+font-size:22px;
+font-weight:bold;
+border-bottom:1px solid #ddd;
 }
 
-h1{
-font-size:40px;
+.container{
+padding:20px;
+max-width:500px;
+margin:auto;
 }
 
-p{
-color:#aaa;
+input, select, textarea{
+width:100%;
+padding:12px;
+margin:8px 0;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:14px;
 }
 
 button{
-background:#5865F2;
+width:100%;
+padding:14px;
 border:none;
-padding:15px 25px;
-color:white;
-font-size:18px;
 border-radius:10px;
+background:#0095f6;
+color:white;
+font-size:16px;
+margin-top:10px;
+}
+
+.profile-card{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
 margin-top:20px;
 }
 
-select,input{
-padding:12px;
-margin:10px;
-border-radius:8px;
-border:none;
-font-size:16px;
+.profile-card img{
+width:100px;
+height:100px;
+border-radius:50%;
+object-fit:cover;
+display:block;
+margin:auto;
 }
 
-.card{
-margin-top:30px;
-padding:20px;
-border:1px solid #333;
-border-radius:15px;
+.hidden{
+display:none;
+}
+
+.feed{
+margin-top:20px;
+}
+
+.user{
+background:white;
+padding:15px;
+border-radius:12px;
+margin-bottom:15px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 </style>
 </head>
 
 <body>
 
-<h1>ORYA 🌍</h1>
-<p>Conectando pessoas reais entre países</p>
+<header>ORYA 🌍</header>
 
-<div class="card">
+<div class="container">
 
-<h3>Seu nome</h3>
-<input id="nome" placeholder="Digite seu nome">
+<div id="formulario">
+<h3>Criar seu perfil</h3>
 
-<h3>Seu país</h3>
+<input id="foto" type="file" accept="image/*">
+<input id="nome" placeholder="Nome">
+<input id="idade" type="number" placeholder="Idade">
+
 <select id="pais">
 <option>Brasil</option>
 <option>Estados Unidos</option>
@@ -70,38 +105,76 @@ border-radius:15px;
 <option>Argentina</option>
 </select>
 
-<br>
+<select id="status">
+<option>Solteiro(a)</option>
+<option>Casado(a)</option>
+<option>Outro</option>
+</select>
 
-<button onclick="entrar()">Entrar no Orya</button>
+<textarea id="bio" placeholder="Escreva algo sobre você"></textarea>
 
+<button onclick="criarPerfil()">Entrar no Mundo</button>
 </div>
 
-<div id="conexao" style="display:none" class="card">
-<h2>🌎 Conectando você com outro país...</h2>
-<p id="resultado"></p>
+<div id="perfil" class="hidden">
+<div class="profile-card">
+<img id="preview">
+<h2 id="nomePerfil"></h2>
+<p id="infoPerfil"></p>
+<p id="bioPerfil"></p>
+</div>
+
+<div class="feed">
+<h3>Pessoas do Mundo</h3>
+
+<div class="user">
+<b>Anna, 22</b><br>
+Alemanha • Solteira
+</div>
+
+<div class="user">
+<b>Kenji, 27</b><br>
+Japão • Solteiro
+</div>
+
+<div class="user">
+<b>Sofia, 25</b><br>
+Argentina • Solteira
+</div>
+
+</div>
+</div>
+
 </div>
 
 <script>
-function entrar(){
+function criarPerfil(){
 let nome = document.getElementById("nome").value;
+let idade = document.getElementById("idade").value;
 let pais = document.getElementById("pais").value;
+let status = document.getElementById("status").value;
+let bio = document.getElementById("bio").value;
+let foto = document.getElementById("foto").files[0];
 
-if(nome==""){
-alert("Digite seu nome");
+if(nome=="" || idade==""){
+alert("Preencha nome e idade");
 return;
 }
 
-document.querySelector(".card").style.display="none";
-document.getElementById("conexao").style.display="block";
+document.getElementById("formulario").classList.add("hidden");
+document.getElementById("perfil").classList.remove("hidden");
 
-let paises = ["Japão","EUA","Coreia","Alemanha","França","México","Canadá"];
+document.getElementById("nomePerfil").innerText = nome;
+document.getElementById("infoPerfil").innerText = idade + " anos • " + pais + " • " + status;
+document.getElementById("bioPerfil").innerText = bio;
 
-let aleatorio = paises[Math.floor(Math.random()*paises.length)];
-
-setTimeout(()=>{
-document.getElementById("resultado").innerHTML =
-nome + " do " + pais + " conectado com alguém do " + aleatorio + " 🇺🇳<br><br>Chat global em breve...";
-},2000);
+if(foto){
+let reader = new FileReader();
+reader.onload = function(e){
+document.getElementById("preview").src = e.target.result;
+}
+reader.readAsDataURL(foto);
+}
 }
 </script>
 
