@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -19,12 +20,22 @@ text-align:center;
 font-size:22px;
 font-weight:bold;
 border-bottom:1px solid #ddd;
+position:sticky;
+top:0;
+}
+
+.topinfo{
+text-align:center;
+font-size:13px;
+color:#666;
+padding:8px;
+background:#f3f3f3;
 }
 
 .container{
-padding:20px;
 max-width:500px;
 margin:auto;
+padding:15px;
 }
 
 input, select, textarea{
@@ -47,37 +58,40 @@ font-size:16px;
 margin-top:10px;
 }
 
-.profile-card{
+.card{
 background:white;
-padding:20px;
-border-radius:15px;
-box-shadow:0 2px 10px rgba(0,0,0,0.05);
-margin-top:20px;
+padding:18px;
+border-radius:14px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+margin-bottom:15px;
 }
 
-.profile-card img{
-width:100px;
-height:100px;
-border-radius:50%;
+.profile-photo{
+width:100%;
+height:220px;
+border-radius:12px;
 object-fit:cover;
-display:block;
-margin:auto;
+margin-bottom:10px;
+}
+
+.name{
+font-weight:bold;
+font-size:16px;
+}
+
+.country{
+color:#777;
+font-size:13px;
+margin-bottom:6px;
+}
+
+.bio{
+font-size:14px;
+margin-bottom:10px;
 }
 
 .hidden{
 display:none;
-}
-
-.feed{
-margin-top:20px;
-}
-
-.user{
-background:white;
-padding:15px;
-border-radius:12px;
-margin-bottom:15px;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 </style>
 </head>
@@ -85,13 +99,13 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 <body>
 
 <header>ORYA 🌍</header>
+<div id="topo" class="topinfo hidden"></div>
 
 <div class="container">
 
 <div id="formulario">
-<h3>Criar seu perfil</h3>
+<h3>Criar perfil</h3>
 
-<input id="foto" type="file" accept="image/*">
 <input id="nome" placeholder="Nome">
 <input id="idade" type="number" placeholder="Idade">
 
@@ -102,7 +116,10 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 <option>Coreia do Sul</option>
 <option>Alemanha</option>
 <option>França</option>
+<option>Reino Unido</option>
+<option>Canadá</option>
 <option>Argentina</option>
+<option>México</option>
 </select>
 
 <select id="status">
@@ -111,70 +128,65 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 <option>Outro</option>
 </select>
 
-<textarea id="bio" placeholder="Escreva algo sobre você"></textarea>
+<textarea id="bio" placeholder="Fale sobre você"></textarea>
 
-<button onclick="criarPerfil()">Entrar no Mundo</button>
+<button onclick="entrar()">Entrar no Orya</button>
 </div>
 
-<div id="perfil" class="hidden">
-<div class="profile-card">
-<img id="preview">
-<h2 id="nomePerfil"></h2>
-<p id="infoPerfil"></p>
-<p id="bioPerfil"></p>
-</div>
+<div id="feed" class="hidden">
 
-<div class="feed">
-<h3>Pessoas do Mundo</h3>
+<div id="feedPessoas"></div>
 
-<div class="user">
-<b>Anna, 22</b><br>
-Alemanha • Solteira
-</div>
-
-<div class="user">
-<b>Kenji, 27</b><br>
-Japão • Solteiro
-</div>
-
-<div class="user">
-<b>Sofia, 25</b><br>
-Argentina • Solteira
-</div>
-
-</div>
 </div>
 
 </div>
 
 <script>
-function criarPerfil(){
-let nome = document.getElementById("nome").value;
-let idade = document.getElementById("idade").value;
-let pais = document.getElementById("pais").value;
-let status = document.getElementById("status").value;
-let bio = document.getElementById("bio").value;
-let foto = document.getElementById("foto").files[0];
+let pessoas = [
+{nome:"Anna",idade:22,pais:"Alemanha 🇩🇪",bio:"Amo viajar e conhecer culturas"},
+{nome:"Kenji",idade:27,pais:"Japão 🇯🇵",bio:"Gosto de música e tecnologia"},
+{nome:"Sofia",idade:25,pais:"Argentina 🇦🇷",bio:"Amo fotografia"},
+{nome:"Lucas",idade:24,pais:"Brasil 🇧🇷",bio:"Explorando o mundo"},
+{nome:"Emma",idade:23,pais:"EUA 🇺🇸",bio:"Love culture exchange"},
+{nome:"Noah",idade:29,pais:"Canadá 🇨🇦",bio:"Looking for global friends"},
+{nome:"Jiwoo",idade:21,pais:"Coreia 🇰🇷",bio:"Music and travel"},
+{nome:"Leo",idade:28,pais:"França 🇫🇷",bio:"Cinema e arte"}
+];
 
-if(nome=="" || idade==""){
-alert("Preencha nome e idade");
+function entrar(){
+let nome = document.getElementById("nome").value;
+let pais = document.getElementById("pais").value;
+
+if(nome==""){
+alert("Digite seu nome");
 return;
 }
 
 document.getElementById("formulario").classList.add("hidden");
-document.getElementById("perfil").classList.remove("hidden");
+document.getElementById("feed").classList.remove("hidden");
+document.getElementById("topo").classList.remove("hidden");
 
-document.getElementById("nomePerfil").innerText = nome;
-document.getElementById("infoPerfil").innerText = idade + " anos • " + pais + " • " + status;
-document.getElementById("bioPerfil").innerText = bio;
+document.getElementById("topo").innerHTML =
+"🌍 Você está no "+pais+" — explorando pessoas do mundo";
 
-if(foto){
-let reader = new FileReader();
-reader.onload = function(e){
-document.getElementById("preview").src = e.target.result;
+carregarFeed();
 }
-reader.readAsDataURL(foto);
-}
+
+function carregarFeed(){
+let area = document.getElementById("feedPessoas");
+area.innerHTML="";
+
+pessoas.forEach(p=>{
+area.innerHTML += `
+<div class="card">
+<img class="profile-photo" src="https://picsum.photos/400?random=${Math.random()}">
+<div class="name">${p.nome}, ${p.idade}</div>
+<div class="country">${p.pais}</div>
+<div class="bio">${p.bio}</div>
+<button>Conversar</button>
+</div>
+`;
+});
 }
 </script>
 
