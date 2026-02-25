@@ -140,8 +140,30 @@ display:none;
 </div>
 
 </div>
+let usuarioAtual = "";
+let pessoaChat = "";
 
-<script>
+function abrirChat(nome){
+  pessoaChat = nome;
+  document.getElementById("feed").classList.add("hidden");
+  document.getElementById("chat").classList.remove("hidden");
+  document.getElementById("chatNome").innerText = "Conversando com " + nome;
+}
+
+function voltarFeed(){
+  document.getElementById("chat").classList.add("hidden");
+  document.getElementById("feed").classList.remove("hidden");
+}
+
+function enviarMensagem(){
+  let msg = document.getElementById("mensagemInput").value;
+  if(msg=="") return;
+
+  let area = document.getElementById("mensagens");
+  area.innerHTML += "<div><b>Você:</b> " + msg + "</div>";
+  document.getElementById("mensagemInput").value="";
+}
+
 let pessoas = [
 {nome:"Anna",idade:22,pais:"Alemanha 🇩🇪",bio:"Amo viajar e conhecer culturas"},
 {nome:"Kenji",idade:27,pais:"Japão 🇯🇵",bio:"Gosto de música e tecnologia"},
