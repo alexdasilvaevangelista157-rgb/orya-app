@@ -11,15 +11,17 @@ background:black;
 color:white;
 font-family:Arial;
 text-align:center;
-padding:40px;
+padding:30px;
 }
+
 h1{
 font-size:40px;
 }
+
 p{
-font-size:18px;
 color:#aaa;
 }
+
 button{
 background:#5865F2;
 border:none;
@@ -29,15 +31,79 @@ font-size:18px;
 border-radius:10px;
 margin-top:20px;
 }
+
+select,input{
+padding:12px;
+margin:10px;
+border-radius:8px;
+border:none;
+font-size:16px;
+}
+
+.card{
+margin-top:30px;
+padding:20px;
+border:1px solid #333;
+border-radius:15px;
+}
 </style>
 </head>
 
 <body>
 
-<h1>ORYA</h1>
-<p>Plataforma global de conexão entre culturas e pessoas do mundo.</p>
+<h1>ORYA 🌍</h1>
+<p>Conectando pessoas reais entre países</p>
 
-<button>Entrar</button>
+<div class="card">
+
+<h3>Seu nome</h3>
+<input id="nome" placeholder="Digite seu nome">
+
+<h3>Seu país</h3>
+<select id="pais">
+<option>Brasil</option>
+<option>Estados Unidos</option>
+<option>Japão</option>
+<option>Coreia do Sul</option>
+<option>Alemanha</option>
+<option>França</option>
+<option>Argentina</option>
+</select>
+
+<br>
+
+<button onclick="entrar()">Entrar no Orya</button>
+
+</div>
+
+<div id="conexao" style="display:none" class="card">
+<h2>🌎 Conectando você com outro país...</h2>
+<p id="resultado"></p>
+</div>
+
+<script>
+function entrar(){
+let nome = document.getElementById("nome").value;
+let pais = document.getElementById("pais").value;
+
+if(nome==""){
+alert("Digite seu nome");
+return;
+}
+
+document.querySelector(".card").style.display="none";
+document.getElementById("conexao").style.display="block";
+
+let paises = ["Japão","EUA","Coreia","Alemanha","França","México","Canadá"];
+
+let aleatorio = paises[Math.floor(Math.random()*paises.length)];
+
+setTimeout(()=>{
+document.getElementById("resultado").innerHTML =
+nome + " do " + pais + " conectado com alguém do " + aleatorio + " 🇺🇳<br><br>Chat global em breve...";
+},2000);
+}
+</script>
 
 </body>
 </html>
