@@ -1,15 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Orya</title>
+<title>Orya 🌍</title>
 
 <style>
 body{
 margin:0;
-font-family: Arial, sans-serif;
+font-family:Arial, sans-serif;
 background:#fafafa;
 }
 
@@ -22,76 +21,87 @@ font-weight:bold;
 border-bottom:1px solid #ddd;
 position:sticky;
 top:0;
-}
-
-.topinfo{
-text-align:center;
-font-size:13px;
-color:#666;
-padding:8px;
-background:#f3f3f3;
+z-index:999;
 }
 
 .container{
+padding:15px;
 max-width:500px;
 margin:auto;
-padding:15px;
 }
 
-input, select, textarea{
+input,select,textarea{
 width:100%;
 padding:12px;
-margin:8px 0;
+margin-top:10px;
 border-radius:10px;
 border:1px solid #ddd;
-font-size:14px;
+font-size:16px;
 }
 
 button{
 width:100%;
 padding:14px;
+margin-top:12px;
 border:none;
-border-radius:10px;
-background:#0095f6;
+border-radius:12px;
+background:#1d9bf0;
 color:white;
 font-size:16px;
-margin-top:10px;
+font-weight:bold;
 }
 
 .card{
 background:white;
-padding:18px;
-border-radius:14px;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
-margin-bottom:15px;
+padding:12px;
+border-radius:16px;
+margin-top:15px;
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
 }
 
 .profile-photo{
 width:100%;
-height:220px;
-border-radius:12px;
+height:250px;
 object-fit:cover;
-margin-bottom:10px;
+border-radius:12px;
 }
 
 .name{
+font-size:18px;
 font-weight:bold;
-font-size:16px;
+margin-top:8px;
 }
 
 .country{
-color:#777;
-font-size:13px;
-margin-bottom:6px;
+color:#666;
+font-size:14px;
 }
 
 .bio{
-font-size:14px;
-margin-bottom:10px;
+margin-top:6px;
 }
 
-.hidden{
-display:none;
+.hidden{display:none;}
+
+.topbar{
+padding:10px;
+background:#f1f1f1;
+font-size:14px;
+text-align:center;
+}
+
+.chatbox{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:white;
+padding:10px;
+border-top:1px solid #ddd;
+}
+
+.msg{
+margin:5px 0;
 }
 </style>
 </head>
@@ -99,33 +109,39 @@ display:none;
 <body>
 
 <header>ORYA 🌍</header>
-<div id="topo" class="topinfo hidden"></div>
 
-<div class="container">
+<div class="topbar hidden" id="topo"></div>
 
-<div id="formulario">
+<div class="container" id="login">
+
 <h3>Criar perfil</h3>
 
 <input id="nome" placeholder="Nome">
-<input id="idade" type="number" placeholder="Idade">
+<input id="idade" placeholder="Idade">
 
 <select id="pais">
-<option>Brasil</option>
-<option>Estados Unidos</option>
-<option>Japão</option>
-<option>Coreia do Sul</option>
-<option>Alemanha</option>
-<option>França</option>
-<option>Reino Unido</option>
-<option>Canadá</option>
-<option>Argentina</option>
-<option>México</option>
+<option>Brasil 🇧🇷</option>
+<option>Estados Unidos 🇺🇸</option>
+<option>Japão 🇯🇵</option>
+<option>Coreia do Sul 🇰🇷</option>
+<option>China 🇨🇳</option>
+<option>Canadá 🇨🇦</option>
+<option>Argentina 🇦🇷</option>
+<option>México 🇲🇽</option>
+<option>França 🇫🇷</option>
+<option>Alemanha 🇩🇪</option>
+<option>Espanha 🇪🇸</option>
+<option>Itália 🇮🇹</option>
+<option>Portugal 🇵🇹</option>
+<option>Reino Unido 🇬🇧</option>
+<option>Índia 🇮🇳</option>
+<option>Indonésia 🇮🇩</option>
 </select>
 
 <select id="status">
 <option>Solteiro(a)</option>
+<option>Namorando</option>
 <option>Casado(a)</option>
-<option>Outro</option>
 </select>
 
 <textarea id="bio" placeholder="Fale sobre você"></textarea>
@@ -133,76 +149,109 @@ display:none;
 <button onclick="entrar()">Entrar no Orya</button>
 </div>
 
-<div id="feed" class="hidden">
-
+<div class="container hidden" id="feed">
+<input placeholder="🔎 Buscar pessoas..." onkeyup="buscar(this.value)">
 <div id="feedPessoas"></div>
-
 </div>
 
+<div class="container hidden" id="chat">
+<h3 id="chatNome"></h3>
+<div id="mensagens"></div>
+<div class="chatbox">
+<input id="msgInput" placeholder="Mensagem...">
+<button onclick="enviar()">Enviar</button>
+<button onclick="voltar()">Voltar</button>
 </div>
-let usuarioAtual = "";
-let pessoaChat = "";
+</div>
 
-function abrirChat(nome){
-  pessoaChat = nome;
-  document.getElementById("feed").classList.add("hidden");
-  document.getElementById("chat").classList.remove("hidden");
-  document.getElementById("chatNome").innerText = "Conversando com " + nome;
-}
+<script>
 
-function voltarFeed(){
-  document.getElementById("chat").classList.add("hidden");
-  document.getElementById("feed").classList.remove("hidden");
-}
+let usuario="";
+let conversando="";
 
-
-
-let pessoas = [
-{nome:"Anna",idade:22,pais:"Alemanha 🇩🇪",bio:"Amo viajar e conhecer culturas"},
-{nome:"Kenji",idade:27,pais:"Japão 🇯🇵",bio:"Gosto de música e tecnologia"},
-{nome:"Sofia",idade:25,pais:"Argentina 🇦🇷",bio:"Amo fotografia"},
+let pessoas=[
+{nome:"Anna",idade:22,pais:"Alemanha 🇩🇪",bio:"Amo viajar e culturas"},
+{nome:"Kenji",idade:27,pais:"Japão 🇯🇵",bio:"Tecnologia e anime"},
+{nome:"Sofia",idade:25,pais:"Argentina 🇦🇷",bio:"Fotografia"},
 {nome:"Lucas",idade:24,pais:"Brasil 🇧🇷",bio:"Explorando o mundo"},
 {nome:"Emma",idade:23,pais:"EUA 🇺🇸",bio:"Love culture exchange"},
-{nome:"Noah",idade:29,pais:"Canadá 🇨🇦",bio:"Looking for global friends"},
+{nome:"Noah",idade:29,pais:"Canadá 🇨🇦",bio:"Looking for friends"},
 {nome:"Jiwoo",idade:21,pais:"Coreia 🇰🇷",bio:"Music and travel"},
 {nome:"Leo",idade:28,pais:"França 🇫🇷",bio:"Cinema e arte"}
 ];
 
 function entrar(){
-let nome = document.getElementById("nome").value;
-let pais = document.getElementById("pais").value;
+let n=document.getElementById("nome").value;
+let p=document.getElementById("pais").value;
 
-if(nome==""){
-alert("Digite seu nome");
-return;
-}
+if(n==""){alert("Digite nome");return;}
 
-document.getElementById("formulario").classList.add("hidden");
+usuario=n;
+
+document.getElementById("login").classList.add("hidden");
 document.getElementById("feed").classList.remove("hidden");
 document.getElementById("topo").classList.remove("hidden");
+document.getElementById("topo").innerHTML="🌍 Você está no "+p+" — explorando o mundo";
 
-document.getElementById("topo").innerHTML =
-"🌍 Você está no "+pais+" — explorando pessoas do mundo";
-
-carregarFeed();
+carregar();
 }
 
-function carregarFeed(){
-let area = document.getElementById("feedPessoas");
+function carregar(){
+let area=document.getElementById("feedPessoas");
 area.innerHTML="";
 
 pessoas.forEach(p=>{
-area.innerHTML += `
+area.innerHTML+=`
 <div class="card">
 <img class="profile-photo" src="https://picsum.photos/400?random=${Math.random()}">
 <div class="name">${p.nome}, ${p.idade}</div>
 <div class="country">${p.pais}</div>
 <div class="bio">${p.bio}</div>
-<button>Conversar</button>
+<button onclick="abrirChat('${p.nome}')">Conversar</button>
 </div>
 `;
 });
 }
+
+function buscar(t){
+let area=document.getElementById("feedPessoas");
+area.innerHTML="";
+
+pessoas.filter(p=>p.nome.toLowerCase().includes(t.toLowerCase()))
+.forEach(p=>{
+area.innerHTML+=`
+<div class="card">
+<img class="profile-photo" src="https://picsum.photos/400?random=${Math.random()}">
+<div class="name">${p.nome}, ${p.idade}</div>
+<div class="country">${p.pais}</div>
+<div class="bio">${p.bio}</div>
+<button onclick="abrirChat('${p.nome}')">Conversar</button>
+</div>
+`;
+});
+}
+
+function abrirChat(nome){
+conversando=nome;
+document.getElementById("feed").classList.add("hidden");
+document.getElementById("chat").classList.remove("hidden");
+document.getElementById("chatNome").innerText="Conversando com "+nome;
+}
+
+function voltar(){
+document.getElementById("chat").classList.add("hidden");
+document.getElementById("feed").classList.remove("hidden");
+}
+
+function enviar(){
+let msg=document.getElementById("msgInput").value;
+if(msg=="")return;
+
+let area=document.getElementById("mensagens");
+area.innerHTML+=`<div class="msg"><b>Você:</b> ${msg}</div>`;
+document.getElementById("msgInput").value="";
+}
+
 </script>
 
 </body>
