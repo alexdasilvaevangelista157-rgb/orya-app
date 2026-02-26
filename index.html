@@ -1,179 +1,153 @@
-
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Orya</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-body{
-margin:0;
-background:#0f1117;
-font-family:Arial,Helvetica,sans-serif;
-color:white;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f0f0f;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.top{
-position:fixed;
-top:0;
-width:100%;
-text-align:center;
-padding:18px;
-font-size:26px;
-font-weight:bold;
-background:#0f1117;
-border-bottom:1px solid #222;
-z-index:10;
+.container {
+  width: 90%;
+  max-width: 400px;
+  background: #1c1c1c;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
 }
 
-.screen{
-display:none;
-padding-top:80px;
-padding-bottom:80px;
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 28px;
 }
 
-.active{
-display:block;
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+  background: #2a2a2a;
+  color: white;
 }
 
-.post{
-background:#151823;
-margin:14px;
-padding:16px;
-border-radius:14px;
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #00ff88;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.name{
-font-size:18px;
-font-weight:bold;
+button:hover {
+  opacity: 0.8;
 }
 
-.country{
-font-size:13px;
-opacity:0.7;
-margin-top:3px;
+.toggle {
+  margin-top: 15px;
+  text-align: center;
+  cursor: pointer;
+  color: #888;
 }
 
-.bio{
-margin-top:8px;
-font-size:15px;
+.feed {
+  display: none;
+  text-align: center;
 }
 
-.bottom{
-position:fixed;
-bottom:0;
-width:100%;
-background:#0f1117;
-display:flex;
-justify-content:space-around;
-padding:14px 0;
-font-size:22px;
-border-top:1px solid #222;
-}
-
-.icon{
-opacity:0.8;
-cursor:pointer;
-}
-
-textarea{
-width:90%;
-margin:20px;
-padding:10px;
-border-radius:10px;
-border:none;
-background:#1c1f2b;
-color:white;
-}
-button{
-margin:20px;
-padding:10px 20px;
-border:none;
-border-radius:10px;
-background:#4c6fff;
-color:white;
+.logout {
+  margin-top: 20px;
+  background: #ff4444;
 }
 </style>
 </head>
-
 <body>
 
-<div class="top">Orya 🌍</div>
+<div class="container" id="authBox">
+  <h1>ORYA</h1>
 
-<!-- FEED -->
-<div id="feed" class="screen active">
+  <input type="email" id="email" placeholder="Email" />
+  <input type="password" id="password" placeholder="Senha" />
 
-<div class="post">
-<div class="name">Lucas 🇧🇷</div>
-<div class="country">Brasil</div>
-<div class="bio">Explorando culturas e novas amizades 🌎</div>
-</div>
+  <button onclick="login()">Entrar</button>
+  <button onclick="register()">Criar Conta</button>
 
-<div class="post">
-<div class="name">Emily 🇺🇸</div>
-<div class="country">Estados Unidos</div>
-<div class="bio">Meeting people from different worlds 🌍</div>
+  <div class="toggle" id="message"></div>
 </div>
 
-</div>
-
-<!-- PERFIL -->
-<div id="profile" class="screen">
-<div class="post">
-<div class="name">Seu Perfil 👤</div>
-<div class="country">Brasil</div>
-<div class="bio">Essa é sua bio.</div>
-</div>
-</div>
-
-<!-- POSTAR -->
-<div id="create" class="screen">
-<textarea id="postText" placeholder="Escreva algo..."></textarea>
-<button onclick="addPost()">Publicar</button>
-</div>
-
-<!-- CURTIDAS -->
-<div id="likes" class="screen">
-<div class="post">
-Você ainda não tem curtidas ❤️
-</div>
-</div>
-
-<!-- BUSCA -->
-<div id="search" class="screen">
-<div class="post">
-Busca global em breve 🔍
-</div>
-</div>
-
-<div class="bottom">
-<div class="icon" onclick="showScreen('feed')">🏠</div>
-<div class="icon" onclick="showScreen('search')">🔍</div>
-<div class="icon" onclick="showScreen('create')">➕</div>
-<div class="icon" onclick="showScreen('likes')">❤️</div>
-<div class="icon" onclick="showScreen('profile')">👤</div>
+<div class="container feed" id="feedBox">
+  <h1>Bem-vindo ao Orya 🌍</h1>
+  <p>Login realizado com sucesso.</p>
+  <button class="logout" onclick="logout()">Sair</button>
 </div>
 
 <script>
-function showScreen(id){
-document.querySelectorAll('.screen').forEach(screen=>{
-screen.classList.remove('active');
-});
-document.getElementById(id).classList.add('active');
+const supabaseUrl = "https://qflchnlaxtqgfvtqgtsl.supabase.co";
+const supabaseKey = "sb_publishable_OFch53maJWq8evi16POsQQ_8z3Fp916";
+
+const client = supabase.createClient(supabaseUrl, supabaseKey);
+
+async function register() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const { error } = await client.auth.signUp({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    document.getElementById("message").innerText = error.message;
+  } else {
+    document.getElementById("message").innerText = "Conta criada com sucesso!";
+  }
 }
 
-function addPost(){
-let text=document.getElementById("postText").value;
-if(text.trim()!==""){
-let post=document.createElement("div");
-post.className="post";
-post.innerHTML="<div class='name'>Você 🇧🇷</div><div class='country'>Brasil</div><div class='bio'>"+text+"</div>";
-document.getElementById("feed").prepend(post);
-document.getElementById("postText").value="";
-showScreen("feed");
+async function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const { error } = await client.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    document.getElementById("message").innerText = error.message;
+  } else {
+    document.getElementById("authBox").style.display = "none";
+    document.getElementById("feedBox").style.display = "block";
+  }
 }
+
+async function logout() {
+  await client.auth.signOut();
+  document.getElementById("feedBox").style.display = "none";
+  document.getElementById("authBox").style.display = "block";
 }
+
+client.auth.getSession().then(({ data }) => {
+  if (data.session) {
+    document.getElementById("authBox").style.display = "none";
+    document.getElementById("feedBox").style.display = "block";
+  }
+});
 </script>
 
 </body>
