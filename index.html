@@ -120,7 +120,13 @@ async function postar(){
 let texto=document.getElementById("texto").value;
 if(!texto) return;
 
-await supabase.from("posts").insert([{texto:texto}]);
+let { data: { user } } = await supabase.auth.getUser();
+
+await supabase.from("posts").insert([{
+texto:texto,
+user_id:user.id
+}]);
+
 document.getElementById("texto").value="";
 carregar();
 }
