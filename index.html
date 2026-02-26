@@ -1,155 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Orya</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f0f0f;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.container {
-  width: 90%;
-  max-width: 400px;
-  background: #1c1c1c;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.6);
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 28px;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  border: none;
-  background: #2a2a2a;
-  color: white;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: none;
-  background: #00ff88;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-.toggle {
-  margin-top: 15px;
-  text-align: center;
-  cursor: pointer;
-  color: #888;
-}
-
-.feed {
-  display: none;
-  text-align: center;
-}
-
-.logout {
-  margin-top: 20px;
-  background: #ff4444;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orya</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-<div class="container" id="authBox">
-  <h1>ORYA</h1>
-
-  <input type="email" id="email" placeholder="Email" />
-  <input type="password" id="password" placeholder="Senha" />
-
+<div id="auth-screen" class="center">
+  <h1>Orya 🌍</h1>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Senha">
   <button onclick="login()">Entrar</button>
-  <button onclick="register()">Criar Conta</button>
-
-  <div class="toggle" id="message"></div>
+  <button onclick="register()">Criar conta</button>
 </div>
 
-<div class="container feed" id="feedBox">
-  <h1>Bem-vindo ao Orya 🌍</h1>
-  <p>Login realizado com sucesso.</p>
-  <button class="logout" onclick="logout()">Sair</button>
+<div id="app" class="hidden">
+
+  <div class="topbar">
+    <h2>🌍 Orya</h2>
+    <button onclick="logout()">Sair</button>
+  </div>
+
+  <div id="feed"></div>
+
+  <div class="post-box">
+    <textarea id="postContent" placeholder="Compartilhe algo com o mundo..."></textarea>
+    <button onclick="createPost()">Publicar</button>
+  </div>
+
 </div>
 
-<script>
-const supabaseUrl = "https://qflchnlaxtqgfvtqgtsl.supabase.co";
-const supabaseKey = "sb_publishable_OFch53maJWq8evi16POsQQ_8z3Fp916";
-
-const client = supabase.createClient(supabaseUrl, supabaseKey);
-
-async function register() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  const { error } = await client.auth.signUp({
-    email: email,
-    password: password
-  });
-
-  if (error) {
-    document.getElementById("message").innerText = error.message;
-  } else {
-    document.getElementById("message").innerText = "Conta criada com sucesso!";
-  }
-}
-
-async function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  const { error } = await client.auth.signInWithPassword({
-    email: email,
-    password: password
-  });
-
-  if (error) {
-    document.getElementById("message").innerText = error.message;
-  } else {
-    document.getElementById("authBox").style.display = "none";
-    document.getElementById("feedBox").style.display = "block";
-  }
-}
-
-async function logout() {
-  await client.auth.signOut();
-  document.getElementById("feedBox").style.display = "none";
-  document.getElementById("authBox").style.display = "block";
-}
-
-client.auth.getSession().then(({ data }) => {
-  if (data.session) {
-    document.getElementById("authBox").style.display = "none";
-    document.getElementById("feedBox").style.display = "block";
-  }
-});
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
 
