@@ -1,48 +1,59 @@
-
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Orya</title>
-
-  <link rel="stylesheet" href="style.css">
-
-  <!-- Fonte moderna -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orya</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <!-- 🔵 TELA LOGIN -->
-  <div id="login-screen" class="screen">
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+
     <h1 class="logo">Orya</h1>
 
     <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Senha">
+    <input type="password" id="password" placeholder="Password">
 
-    <button onclick="login()">Entrar</button>
-    <button onclick="signup()" class="sec">Criar conta</button>
-  </div>
+    <button onclick="login()">Enter</button>
+    <button onclick="register()">Create account</button>
 
-  <!-- 🏠 APP PRINCIPAL -->
-  <div id="app" class="hidden">
+    <p class="mini-text">
+    Connect with people from different countries.
+    Share your world.
+    </p>
 
-    <!-- topo -->
-    <header>
-      <h2>Orya</h2>
-      <button onclick="logout()">Sair</button>
-    </header>
+</div>
 
-    <!-- feed -->
-    <div id="feed">
-      <h3>Feed global</h3>
-      <div id="posts"></div>
+<!-- APP SCREEN -->
+<div id="app-screen" style="display:none;">
+
+    <div class="topbar">
+        Orya
     </div>
 
-  </div>
+    <div class="feed">
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
+        <div class="post">
+            <div class="username">Global User</div>
+            <div class="bio">Exploring the world 🌍</div>
+        </div>
+
+    </div>
+
+    <div class="bottom">
+        <div>🏠</div>
+        <div>🔍</div>
+        <div>➕</div>
+        <div>❤️</div>
+        <div>👤</div>
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
 </body>
 </html>
