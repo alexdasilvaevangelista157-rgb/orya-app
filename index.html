@@ -1,58 +1,195 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Orya</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+margin:0;
+background:#0f1117;
+font-family:Arial,Helvetica,sans-serif;
+color:white;
+}
+
+/* TOPO */
+.top{
+position:fixed;
+top:0;
+width:100%;
+text-align:center;
+padding:18px;
+font-size:26px;
+font-weight:bold;
+background:#0f1117;
+border-bottom:1px solid #222;
+z-index:10;
+}
+
+/* FEED */
+.feed{
+padding-top:80px;
+padding-bottom:80px;
+}
+
+.post{
+background:#151823;
+margin:14px;
+padding:16px;
+border-radius:14px;
+}
+
+.name{
+font-size:18px;
+font-weight:bold;
+}
+
+.country{
+font-size:13px;
+opacity:0.7;
+margin-top:3px;
+}
+
+.bio{
+margin-top:8px;
+font-size:15px;
+}
+
+/* BOTTOM */
+.bottom{
+position:fixed;
+bottom:0;
+width:100%;
+background:#0f1117;
+display:flex;
+justify-content:space-around;
+padding:14px 0;
+font-size:22px;
+border-top:1px solid #222;
+}
+
+.icon{
+opacity:0.8;
+}
+</style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="login-screen">
-
-<h1 class="logo">Orya</h1>
-
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Password">
-
-<button onclick="login()">Enter</button>
-<button onclick="enterWithoutLogin()">Enter without account</button>
-
-<p class="mini-text">
-Connect with people from different countries.<br>
-Share your world.
-</p>
-
-</div>
-
-<!-- APP -->
-<div id="app-screen" style="display:none;">
-
-<div class="topbar">Orya</div>
+<div class="top">Orya 🌍</div>
 
 <div class="feed">
 
+<!-- AMÉRICA LATINA -->
 <div class="post">
-<div class="username">Global User 🌍</div>
-<div class="bio">Exploring the world</div>
+<div class="name">Lucas 🇧🇷</div>
+<div class="country">Brasil</div>
+<div class="bio">Explorando culturas e novas amizades 🌎</div>
+</div>
+
+<div class="post">
+<div class="name">Camila 🇲🇽</div>
+<div class="country">México</div>
+<div class="bio">Amor por viagens e novas conexões ✈️</div>
+</div>
+
+<div class="post">
+<div class="name">Santiago 🇦🇷</div>
+<div class="country">Argentina</div>
+<div class="bio">Música, café e boas conversas ☕</div>
+</div>
+
+<div class="post">
+<div class="name">Valeria 🇨🇴</div>
+<div class="country">Colômbia</div>
+<div class="bio">Vida real e novas experiências 🌄</div>
+</div>
+
+<!-- AMÉRICA DO NORTE -->
+<div class="post">
+<div class="name">Emily 🇺🇸</div>
+<div class="country">Estados Unidos</div>
+<div class="bio">Meeting people from different worlds 🌍</div>
+</div>
+
+<div class="post">
+<div class="name">Noah 🇨🇦</div>
+<div class="country">Canadá</div>
+<div class="bio">Nature lover and global mindset 🌲</div>
+</div>
+
+<div class="post">
+<div class="name">Daniel 🇩🇴</div>
+<div class="country">República Dominicana</div>
+<div class="bio">Sol, praia e novas amizades ☀️</div>
+</div>
+
+<div class="post">
+<div class="name">Isabella 🇨🇷</div>
+<div class="country">Costa Rica</div>
+<div class="bio">Conectando pessoas pelo mundo 🌐</div>
+</div>
+
+<!-- EUROPA -->
+<div class="post">
+<div class="name">Sofia 🇪🇸</div>
+<div class="country">Espanha</div>
+<div class="bio">Buscando conexões reais ❤️</div>
+</div>
+
+<div class="post">
+<div class="name">Luca 🇮🇹</div>
+<div class="country">Itália</div>
+<div class="bio">Cultura, viagens e histórias 🇮🇹</div>
+</div>
+
+<div class="post">
+<div class="name">Amélie 🇫🇷</div>
+<div class="country">França</div>
+<div class="bio">Arte, vida e novas experiências 🎨</div>
+</div>
+
+<div class="post">
+<div class="name">Jonas 🇩🇪</div>
+<div class="country">Alemanha</div>
+<div class="bio">Tecnologia e conexões globais 💻</div>
+</div>
+
+<!-- SUDESTE ASIÁTICO -->
+<div class="post">
+<div class="name">Ayu 🇮🇩</div>
+<div class="country">Indonésia</div>
+<div class="bio">Conhecendo o mundo uma conversa por vez 🌏</div>
+</div>
+
+<div class="post">
+<div class="name">Miguel 🇵🇭</div>
+<div class="country">Filipinas</div>
+<div class="bio">Sempre aberto para novas culturas 🌴</div>
+</div>
+
+<div class="post">
+<div class="name">Narin 🇹🇭</div>
+<div class="country">Tailândia</div>
+<div class="bio">Vida leve e boas amizades 🌺</div>
+</div>
+
+<div class="post">
+<div class="name">Minh 🇻🇳</div>
+<div class="country">Vietnã</div>
+<div class="bio">Aprendendo com pessoas do mundo 🌎</div>
 </div>
 
 </div>
 
 <div class="bottom">
-<div>🏠</div>
-<div>🔎</div>
-<div>➕</div>
-<div>❤️</div>
-<div>👤</div>
+<div class="icon">🏠</div>
+<div class="icon">🔍</div>
+<div class="icon">➕</div>
+<div class="icon">❤️</div>
+<div class="icon">👤</div>
 </div>
-
-</div>
-
-<script src="app.js"></script>
 
 </body>
 </html>
