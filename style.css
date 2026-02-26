@@ -1,94 +1,76 @@
-
-body{
-margin:0;
-font-family: 'Segoe UI', Arial;
-background:#0f0f14;
-color:white;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f0f0f;
+  color: white;
 }
 
-/* LOGIN */
-#login-screen{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-height:100vh;
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+  text-align: center;
 }
 
-.logo{
-font-size:40px;
-font-weight:bold;
-margin-bottom:20px;
+input, textarea {
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+  background: #1e1e1e;
+  color: white;
 }
 
-input{
-width:80%;
-max-width:320px;
-padding:12px;
-margin:5px;
-border-radius:10px;
-border:none;
-background:#1c1c24;
-color:white;
+button {
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: none;
+  background: #00ff88;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-button{
-width:84%;
-max-width:340px;
-padding:12px;
-margin:8px;
-border:none;
-border-radius:12px;
-background:#5865f2;
-color:white;
-font-size:15px;
-font-weight:bold;
+button:hover {
+  opacity: 0.8;
 }
 
-/* APP */
-#app{
-display:none;
+.hidden {
+  display: none;
 }
 
-.topbar{
-background:#0f0f14;
-padding:15px;
-font-size:20px;
-font-weight:bold;
-border-bottom:1px solid #222;
-text-align:center;
-position:sticky;
-top:0;
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: #111;
+  border-bottom: 1px solid #222;
 }
 
-.feed{
-padding:10px;
+#feed {
+  padding: 15px;
 }
 
-.post{
-background:#161620;
-padding:12px;
-border-radius:14px;
-margin-bottom:12px;
+.post {
+  background: #1a1a1a;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 12px;
 }
 
-.username{
-font-weight:bold;
-margin-bottom:5px;
+.post strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #00ff88;
 }
 
-.bio{
-font-size:13px;
-opacity:0.7;
-}
-
-.bottom{
-position:fixed;
-bottom:0;
-width:100%;
-background:#0f0f14;
-display:flex;
-justify-content:space-around;
-padding:12px;
-border-top:1px solid #222;
+.post-box {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 15px;
+  background: #111;
+  border-top: 1px solid #222;
 }
