@@ -57,9 +57,8 @@ button{
 </div>
 
 <script>
-const { createClient } = supabase;
 
-const client = createClient(
+const client = supabase.createClient(
   "https://qflchnlaxtqgfvtqgtsl.supabase.co",
   "sb_publishable_OFch53maJWq8evi16POsQQ_8z3Fp916"
 );
