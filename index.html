@@ -18,12 +18,10 @@ body{
   align-items:center;
   height:100vh;
 }
-
 .container{
   width:90%;
   max-width:400px;
 }
-
 input{
   width:100%;
   padding:15px;
@@ -31,7 +29,6 @@ input{
   border-radius:10px;
   border:none;
 }
-
 button{
   width:100%;
   padding:15px;
@@ -53,43 +50,39 @@ button{
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Senha">
 
-  <button onclick="login()">Entrar</button>
-  <button onclick="signup()">Criar conta</button>
+  <button id="loginBtn">Entrar</button>
+  <button id="signupBtn">Criar conta</button>
 
   <p id="msg"></p>
 </div>
 
 <script>
-const supabase = window.supabase.createClient(
+const { createClient } = supabase;
+
+const client = createClient(
   "https://qflchnlaxtqgfvtqgtsl.supabase.co",
   "sb_publishable_OFch53maJWq8evi16POsQQ_8z3Fp916"
 );
 
-async function signup(){
+document.getElementById("signupBtn").addEventListener("click", async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const { error } = await supabase.auth.signUp({ email, password });
+  const { error } = await client.auth.signUp({ email, password });
 
-  if(error){
-    document.getElementById("msg").innerText = error.message;
-  } else {
-    document.getElementById("msg").innerText = "Conta criada!";
-  }
-}
+  document.getElementById("msg").innerText =
+    error ? error.message : "Conta criada!";
+});
 
-async function login(){
+document.getElementById("loginBtn").addEventListener("click", async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { error } = await client.auth.signInWithPassword({ email, password });
 
-  if(error){
-    document.getElementById("msg").innerText = error.message;
-  } else {
-    document.getElementById("msg").innerText = "Login realizado!";
-  }
-}
+  document.getElementById("msg").innerText =
+    error ? error.message : "Login realizado!";
+});
 </script>
 
 </body>
