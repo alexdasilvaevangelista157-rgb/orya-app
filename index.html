@@ -5,156 +5,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Orya</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body{
-background:#000;
-color:white;
-font-family:Arial;
-margin:0;
+  background:#000;
+  color:white;
+  font-family:Arial;
+  margin:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
 }
 
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px;
-font-size:22px;
-font-weight:bold;
-}
-
-button{
-background:#00ff88;
-border:none;
-padding:12px 18px;
-border-radius:10px;
-font-weight:bold;
-}
-
-#feed{
-padding:15px;
-margin-bottom:80px;
-}
-
-.post{
-background:#111;
-padding:15px;
-margin-bottom:10px;
-border-radius:12px;
+.container{
+  width:90%;
+  max-width:400px;
 }
 
 input{
-width:70%;
-padding:12px;
-border-radius:10px;
-border:none;
-background:#111;
-color:white;
+  width:100%;
+  padding:15px;
+  margin:10px 0;
+  border-radius:10px;
+  border:none;
 }
 
-#login{
-display:flex;
-flex-direction:column;
-gap:10px;
-padding:30px;
+button{
+  width:100%;
+  padding:15px;
+  margin:10px 0;
+  border:none;
+  border-radius:10px;
+  background:#00ff88;
+  font-weight:bold;
+  font-size:16px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="login">
-<h2>🌍 Orya</h2>
-<input id="email" placeholder="Email">
-<input id="senha" placeholder="Senha" type="password">
-<button onclick="login()">Entrar</button>
-<button onclick="criar()">Criar conta</button>
-</div>
+<div class="container">
+  <h2>🌍 Orya</h2>
 
-<div id="app" style="display:none">
-<header>
-<span>🌍 Orya</span>
-<button onclick="sair()">Sair</button>
-</header>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Senha">
 
-<div id="feed"></div>
+  <button onclick="login()">Entrar</button>
+  <button onclick="signup()">Criar conta</button>
 
-<div style="position:fixed;bottom:0;width:100%;display:flex;padding:10px;background:black">
-<input id="texto" placeholder="Diga oi pro mundo...">
-<button onclick="postar()">Publicar</button>
-</div>
+  <p id="msg"></p>
 </div>
 
 <script>
 const supabase = window.supabase.createClient(
-"https://qflchnlaxtqgfvtqgtsl.supabase.co",
-"sb_publishable_OFch53maJWq8evi16POsQQ_8z3Fp916"
+  "https://qflchnlaxtqgfvtqgtsl.supabase.co",
+  "sb_publishable_OFch53maJWq8evi16POsQQ_8z3Fp916"
 );
 
-async function criar(){
-let email=document.getElementById("email").value;
-let senha=document.getElementById("senha").value;
+async function signup(){
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-await supabase.auth.signUp({email:email,password:senha});
-alert("Conta criada. Faça login.");
+  const { error } = await supabase.auth.signUp({ email, password });
+
+  if(error){
+    document.getElementById("msg").innerText = error.message;
+  } else {
+    document.getElementById("msg").innerText = "Conta criada!";
+  }
 }
 
 async function login(){
-let email=document.getElementById("email").value;
-let senha=document.getElementById("senha").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-let {error}=await supabase.auth.signInWithPassword({email:email,password:senha});
-if(!error){
-iniciar();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if(error){
+    document.getElementById("msg").innerText = error.message;
+  } else {
+    document.getElementById("msg").innerText = "Login realizado!";
+  }
 }
-}
-
-async function iniciar(){
-document.getElementById("login").style.display="none";
-document.getElementById("app").style.display="block";
-carregar();
-}
-
-async function postar(){
-let texto=document.getElementById("texto").value;
-if(!texto) return;
-
-let { data: { user } } = await supabase.auth.getUser();
-
-await supabase.from("posts").insert([{
-texto:texto,
-user_id:user.id
-}]);
-
-document.getElementById("texto").value="";
-carregar();
-}
-
-async function carregar(){
-let {data}=await supabase.from("posts").select("*").order("id",{ascending:false});
-
-let feed=document.getElementById("feed");
-feed.innerHTML="";
-
-if(!data) return;
-
-data.forEach(p=>{
-feed.innerHTML+=`<div class="post">${p.texto}</div>`;
-});
-}
-
-async function sair(){
-await supabase.auth.signOut();
-location.reload();
-}
-
-supabase.auth.getSession().then(({data})=>{
-if(data.session) iniciar();
-});
 </script>
 
 </body>
 </html>
-<!-- atualização -->
-
