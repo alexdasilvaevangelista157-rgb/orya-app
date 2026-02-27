@@ -75,15 +75,19 @@ document.getElementById("signupBtn").addEventListener("click", async () => {
 });
 
 document.getElementById("loginBtn").addEventListener("click", async () => {
+
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const { error } = await client.auth.signInWithPassword({ email, password });
+  const { data, error } = await client.auth.signInWithPassword({
+    email,
+    password
+  });
 
-  document.getElementById("msg").innerText =
-    error ? error.message : "Login realizado!";
+  if (error) {
+    document.getElementById("msg").innerText = error.message;
+  } else {
+    window.location.href = "home.html";
+  }
+
 });
-</script>
-
-</body>
-</html>
